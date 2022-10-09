@@ -38,6 +38,7 @@
 ///
 ///
 import 'package:article_finder/ui/app_colors.dart';
+import 'package:article_finder/ui/article_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -55,7 +56,7 @@ class ArticleFinder extends StatelessWidget {
     );
     return MaterialApp(
       title: 'RW Finder',
-      home: Container(),
+      home: const ArticleListScreen(),
       theme: ThemeData(
         primarySwatch: AppColors.black,
         primaryColor: AppColors.black,
