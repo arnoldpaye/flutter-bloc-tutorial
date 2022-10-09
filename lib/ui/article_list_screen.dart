@@ -1,3 +1,7 @@
+import 'package:article_finder/bloc/article_list_bloc.dart';
+import 'package:article_finder/bloc/bloc_provider.dart';
+import 'package:article_finder/data/article.dart';
+import 'package:article_finder/ui/article_list_item.dart';
 import 'package:flutter/material.dart';
 
 class ArticleListScreen extends StatelessWidget {
@@ -6,6 +10,7 @@ class ArticleListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 1
+    final bloc = BlocProvider.of<ArticleListBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Articles'),
@@ -19,21 +24,56 @@ class ArticleListScreen extends StatelessWidget {
                 border: OutlineInputBorder(),
                 hintText: 'Search ...',
               ),
-              onChanged: (query) {
-                // 2
-              },
+              // 2
+              onChanged: bloc.searchQuery.add,
             ),
           ),
           Expanded(
             // 3
-            child: _buildResults(),
+            child: _buildResults(bloc),
           ),
         ],
       ),
     );
   }
 
-  _buildResults() {
-    return const Center(child: Text('No Results'));
+  _buildResults(ArticleListBloc bloc) {
+    // 1
+    return StreamBuilder<List<Article>?>(
+      stream: bloc.articleStream,
+      builder: (context, snapshot) {
+        // 2
+        final results = snapshot.data;
+        if (results == null) {
+          return const Center(
+            child: Text('Loading ...'),
+          );
+        } else if (results.isEmpty) {
+          return const Center(child: Text('No Results'));
+        }
+        // 3
+        return _buildSearchResults(results);
+      },
+    );
   }
+}
+
+Widget _buildSearchResults(List<Article> results) {
+  return ListView.builder(
+    itemCount: results.length,
+    itemBuilder: (context, index) {
+      final article = results[index];
+      return InkWell(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          // 1
+          child: ArticleListItem(article: article),
+        ),
+        // 2
+        onTap: () {
+          // TODO: Later will be implemented
+        },
+      );
+    },
+  );
 }
