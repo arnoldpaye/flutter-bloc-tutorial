@@ -1,6 +1,8 @@
+import 'package:article_finder/bloc/article_detail_bloc.dart';
 import 'package:article_finder/bloc/article_list_bloc.dart';
 import 'package:article_finder/bloc/bloc_provider.dart';
 import 'package:article_finder/data/article.dart';
+import 'package:article_finder/ui/article_detail_screen.dart';
 import 'package:article_finder/ui/article_list_item.dart';
 import 'package:flutter/material.dart';
 
@@ -71,7 +73,15 @@ Widget _buildSearchResults(List<Article> results) {
         ),
         // 2
         onTap: () {
-          // TODO: Later will be implemented
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BlocProvider(
+                bloc: ArticleDetailBloc(id: article.id),
+                child: const ArticleDetailScreen(),
+              ),
+            ),
+          );
         },
       );
     },
